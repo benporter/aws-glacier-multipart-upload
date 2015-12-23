@@ -7,3 +7,8 @@ Helpful AWS Glacier pages:
 
 Running scripts in parallel:
  - <a href="https://www.gnu.org/software/parallel/parallel_tutorial.html">GNU Parallel Tutorial</a>
+
+This script depends on <b>jq</b> for dealing with json and <b>parallel</b> for submitting the upload commands in parallel.  If you are using Fed/CentOS/RHEL, then run the following:
+
+    sudo dnf install jq
+    sudo dnf install parallel
