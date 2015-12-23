@@ -12,3 +12,12 @@ This script depends on <b>jq</b> for dealing with json and <b>parallel</b> for s
 
     sudo dnf install jq
     sudo dnf install parallel
+
+**Motivation**
+
+
+
+
+**Script Usage**
+
+
