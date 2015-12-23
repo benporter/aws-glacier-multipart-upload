@@ -1,48 +1,46 @@
 #!/bin/bash
 
-# number of concurrent uploads to use at a time
-cores=7
-byteSize=8388607
-
-# count the number of files that begin with "part"
-#fileCount=$(ls -1 | grep "^part*" | wc -l)
-#files=$(ls | grep "^part*")
-fileCount=$(ls -1 | grep "^partzam" | wc -l)
-files=$(ls | grep "^partzam")
-
-iterations=$[$fileCount/$cores]
-
-echo $fileCount
-#echo $files
-echo $iterations
-
+# dependencies, jq and parallel:
 # sudo dnf install jq
 # sudo dnf install parallel
 
-init=$(aws glacier initiate-multipart-upload --account-id - --part-size 1048576 --vault-name media1 --archive-description "Novemeber 2015")
+byteSize=4194304
 
-echo $init
+# count the number of files that begin with "part"
+#fileCount=$(ls -1 | grep "^part" | wc -l)
+#files=$(ls | grep "^part")
+fileCount=$(ls -1 | grep "^partzam" | wc -l)
+files=$(ls | grep "^partzam")
+
+echo "Total parts to upload: " $fileCount
+
+# initiate multipart upload connection to glacier
+init=$(aws glacier initiate-multipart-upload --account-id - --part-size $byteSize --vault-name media1 --archive-description "partzam only test")
 
 echo "---------------------------------------"
 # xargs trims off the quotes
 # jq pulls out the json element titled uploadId
 uploadId=$(echo $init | jq '.uploadId' | xargs)
-echo $uploadId
 
+# create temp file to store commands
+touch commands.txt
+
+# create upload commands to be run in parallel and store in commands.txt
 i=0
 for f in $files 
   do
-     echo $f
      byteStart=$((i*byteSize))
      byteEnd=$((i*byteSize+byteSize-1))
-     echo $i
-     echo $byteStart
-     echo $byteEnd
-     aws glacier upload-multipart-part --body $f --range 'bytes '$byteStart'-'$byteEnd'/*' --account-id - --vault-name media1 --upload-id $uploadId
+     echo aws glacier upload-multipart-part --body $f --range "'"'bytes '"$byteStart"'-'"$byteEnd"'/*'"'" --account-id - --vault-name media1 --upload-id $uploadId >> commands.txt
      i=$(($i+1))
      
-
   done
+
+# run upload commands in parallel
+#   --load 100% option only gives new jobs out if the core is than 100% active
+#   -a commands.txt runs every line of that file in parallel, in potentially random order
+#   --notice supresses citation output to the console
+parallel --load 100% -a commands.txt --no-notice
 
 echo "List Active Multipart Uploads:"
 echo "Verify that a connection is open:"
@@ -56,3 +54,12 @@ echo "------------------------------"
 echo "List Active Multipart Uploads:"
 echo "Verify that the connection is closed:"
 aws glacier list-multipart-uploads --account-id - --vault-name media1
+
+echo "-------------"
+echo "Contents of commands.txt"
+cat commands.txt
+echo "--------------"
+echo "Deleting commands.txt"
+rm commands.txt
+
+
