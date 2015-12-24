@@ -15,7 +15,7 @@ The one-liner <a href="http://docs.aws.amazon.com/cli/latest/reference/glacier/u
  - aws glacier upload-multipart-part --body partab --range 'bytes 4194304-8388607/*' --account-id - --vault-name media1 --upload-id [your upload id here]
  - aws glacier upload-multipart-part --body partac --range 'bytes 8388608-12582911/*' --account-id - --vault-name media1 --upload-id [your upload id here]
  - 1941 commands later...
- - aws glacier upload-multipart-part --body partzbxu --range 'bytes 8153726976-8157921279/*' --account-id - --vault-name media1 --upload-id[your upload id here]
+ - aws glacier upload-multipart-part --body partzbxu --range 'bytes 8153726976-8157921279/*' --account-id - --vault-name media1 --upload-id [your upload id here]
 
 We need a script to handle the math and autogenerate the code.  
 
