@@ -10,7 +10,7 @@ Running scripts in parallel:
 
 **Motivation**
 
-The one-liner <a href="http://docs.aws.amazon.com/cli/latest/reference/glacier/upload-archive.html">upload-archive</a> isn't recommend for files over 100 MB, and you should instead use <a href="http://docs.aws.amazon.com/cli/latest/reference/glacier/upload-multipart-part.html">upload-multipart<a/>.  This is advantageous because you can upload parts of the file in parallel.  The difficult part of using using multiupload is that it is really three major commands, with the second needing to repeated for every file to upload, and a custom byte range needs to be defined for file chunk that is being upload.  For example, with a 4MB file (4194304 bytes) the first three files need the following argument.  This is repeated 1945 times for my 8GB file.
+The one-liner <a href="http://docs.aws.amazon.com/cli/latest/reference/glacier/upload-archive.html">upload-archive</a> isn't recommend for files over 100 MB, and you should instead use <a href="http://docs.aws.amazon.com/cli/latest/reference/glacier/upload-multipart-part.html">upload-multipart<a/>. The difficult part of using using multiupload is that it is really three major commands, with the second needing to repeated for every file to upload, and a custom byte range needs to be defined for each file chunk that is being uploaded.  For example, with a 4MB file (4194304 bytes) the first three files need the following argument.  This is repeated 1945 times for my 8GB file.
  - aws glacier upload-multipart-part --body partaa --range 'bytes 0-4194303/*' --account-id - --vault-name media1 --upload-id [your upload id here]
  - aws glacier upload-multipart-part --body partab --range 'bytes 4194304-8388607/*' --account-id - --vault-name media1 --upload-id [your upload id here]
  - aws glacier upload-multipart-part --body partac --range 'bytes 8388608-12582911/*' --account-id - --vault-name media1 --upload-id [your upload id here]
@@ -19,7 +19,7 @@ The one-liner <a href="http://docs.aws.amazon.com/cli/latest/reference/glacier/u
 
 We need a script to handle the math and autogenerate the code.  
 
-This script also leverages the <a href="https://www.gnu.org/software/parallel/parallel_tutorial.html">parallel</a> library, so my 1945 upload scripts are kicked off in parallel, but are queued up until a core is done with one before proceeding to the next.
+This script leverages the <a href="https://www.gnu.org/software/parallel/parallel_tutorial.html">parallel</a> library, so my 1945 upload scripts are kicked off in parallel, but are queued up until a core is done with one before proceeding to the next.  There is even a progress bar built in that shows you what percent is complete, and an estimated wait time until it is done.
 
 **Prerequisites**
 
