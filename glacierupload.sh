@@ -7,15 +7,14 @@
 byteSize=4194304
 
 # count the number of files that begin with "part"
-#fileCount=$(ls -1 | grep "^part" | wc -l)
-#files=$(ls | grep "^part")
-fileCount=$(ls -1 | grep "^partzam" | wc -l)
-files=$(ls | grep "^partzam")
-
+fileCount=$(ls -1 | grep "^part" | wc -l)
 echo "Total parts to upload: " $fileCount
 
+# get the list of part files to upload.  Edit this if you chose a different prefix in the split command
+files=$(ls | grep "^part")
+
 # initiate multipart upload connection to glacier
-init=$(aws glacier initiate-multipart-upload --account-id - --part-size $byteSize --vault-name media1 --archive-description "partzam only test")
+init=$(aws glacier initiate-multipart-upload --account-id - --part-size $byteSize --vault-name media1 --archive-description "November 2015 Pictures and Videos")
 
 echo "---------------------------------------"
 # xargs trims off the quotes
@@ -40,7 +39,8 @@ for f in $files
 #   --load 100% option only gives new jobs out if the core is than 100% active
 #   -a commands.txt runs every line of that file in parallel, in potentially random order
 #   --notice supresses citation output to the console
-parallel --load 100% -a commands.txt --no-notice
+#   --bar provides a command line progress bar
+parallel --load 100% -a commands.txt --no-notice --bar
 
 echo "List Active Multipart Uploads:"
 echo "Verify that a connection is open:"
@@ -55,11 +55,11 @@ echo "List Active Multipart Uploads:"
 echo "Verify that the connection is closed:"
 aws glacier list-multipart-uploads --account-id - --vault-name media1
 
-echo "-------------"
-echo "Contents of commands.txt"
-cat commands.txt
+#echo "-------------"
+#echo "Contents of commands.txt"
+#cat commands.txt
 echo "--------------"
-echo "Deleting commands.txt"
+echo "Deleting temporary commands.txt file"
 rm commands.txt
 
 
