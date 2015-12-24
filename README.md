@@ -57,7 +57,7 @@ Tar and zip the files you want to upload:
 
     tar -zcvf my-backup.tar.gz /location/to/zip/*
 
-Now chunk out your zipped file into equal peice chunks.  You can only pick multiples of 1MB up to 4MB.  This example chunks out the <i>my-backup.tar.gz</i> file into 4MB chunks, giving all of them the prefix <i>part</i>which is what the script expects to see.  If you choose something other than <i>part</i>, then you'll need to edit the script.
+Now chunk out your zipped file into equal peice chunks.  You can only pick multiples of 1MB up to 4MB.  This example chunks out the <i>my-backup.tar.gz</i> file into 4MB chunks, giving all of them the prefix <i>part</i> which is what the script expects to see.  If you choose something other than <i>part</i>, then you'll need to edit the script.
 
     split --bytes=4194304 --verbose my-backup.tar.gz part
 
