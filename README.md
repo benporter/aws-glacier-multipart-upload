@@ -11,11 +11,11 @@ Running scripts in parallel:
 **Motivation**
 
 The one-liner <a href="http://docs.aws.amazon.com/cli/latest/reference/glacier/upload-archive.html">upload-archive</a> isn't recommend for files over 100 MB, and you should instead use <a href="http://docs.aws.amazon.com/cli/latest/reference/glacier/upload-multipart-part.html">upload-multipart<a/>.  This is advantageous because you can upload parts of the file in parallel.  The difficult part of using using multiupload is that it is really three major commands, with the second needing to repeated for every file to upload, and a custom byte range needs to be defined for file chunk that is being upload.  For example, with a 4MB file (4194304 bytes) the first three files need the following argument.  This is repeated 1945 times for my 8GB file.
- - aws glacier upload-multipart-part --body partaa --range 'bytes 0-4194303/*' --account-id - --vault-name media1 --upload-id <your upload id here>
- - aws glacier upload-multipart-part --body partab --range 'bytes 4194304-8388607/*' --account-id - --vault-name media1 --upload-id <your upload id here>
- - aws glacier upload-multipart-part --body partac --range 'bytes 8388608-12582911/*' --account-id - --vault-name media1 --upload-id <your upload id here>
+ - aws glacier upload-multipart-part --body partaa --range 'bytes 0-4194303/*' --account-id - --vault-name media1 --upload-id [your upload id here]
+ - aws glacier upload-multipart-part --body partab --range 'bytes 4194304-8388607/*' --account-id - --vault-name media1 --upload-id [your upload id here]
+ - aws glacier upload-multipart-part --body partac --range 'bytes 8388608-12582911/*' --account-id - --vault-name media1 --upload-id [your upload id here]
  - 1941 commands later...
- - aws glacier upload-multipart-part --body partzbxu --range 'bytes 8153726976-8157921279/*' --account-id - --vault-name media1 --upload-id <your upload id here>
+ - aws glacier upload-multipart-part --body partzbxu --range 'bytes 8153726976-8157921279/*' --account-id - --vault-name media1 --upload-id[your upload id here]
 
 We need a script to handle the math and autogenerate the code.  
 
