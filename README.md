@@ -32,7 +32,7 @@ This script depends on <b>jq</b> for dealing with json and <b>parallel</b> for s
 
 It assumes you have an AWS account, and have signed up for the glacier service.  In this example, I have already created the vault named <i>media1</i> via AWS console.
 
-It also assumes that you have the AWS Command Line Interface installed on your machine.  Again, if you are using Fed/CentOS/RHEL, then here is how you would get it:
+It also assumes that you have the <a href="http://docs.aws.amazon.com/cli/latest/userguide/installing.html">AWS Command Line Interface</a> installed on your machine.  Again, if you are using Fed/CentOS/RHEL, then here is how you would get it:
 
     sudo pip install awscli
 
