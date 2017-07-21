@@ -72,6 +72,6 @@ Now chunk out your zipped file into equal peice chunks.  You can only pick multi
 
 Now it is time to run the script.  It assumes that your <i>part*</i> files are in the same directory as the script.
 
-    ./glacierupload.sh
+    ./glacierupload.sh <vault name>
 
 
