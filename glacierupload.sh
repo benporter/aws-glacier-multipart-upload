@@ -37,9 +37,9 @@ for f in $files
   done
 
 # run upload commands in parallel
-#   --load 100% option only gives new jobs out if the core is than 100% active
+#   --load 100% option only gives new jobs out if the core is less than 100% active
 #   -a commands.txt runs every line of that file in parallel, in potentially random order
-#   --notice supresses citation output to the console
+#   --no-notice supresses citation output to the console
 #   --bar provides a command line progress bar
 parallel --load 100% -a commands.txt --no-notice --bar
 
